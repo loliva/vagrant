@@ -1,0 +1,24 @@
+######
+VAGRANTFILE_API_VERSION = "2"
+#####
+BASE_UBUNTU = "ubuntu1604"
+#BASE_UBUNTU = "https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+#Configuracion de recursos para maquinas virtuales del entorno
+config.vm.provider "virtualbox" do |v|
+    v.cpus        = 2
+    v.memory    = 2048
+end
+
+# provisionamiento base, comun para todos
+config.vm.provision "shell", path: "setup.sh", privileged: true
+
+# docker "192.168.124.250"
+    config.vm.define "docker" do |box|
+        box.vm.box = BASE_UBUNTU
+        box.vm.network "private_network", virtualbox__intnet: "macbook", ip: "192.168.124.250"
+        box.vm.hostname = "docker"
+    end
+
+end
